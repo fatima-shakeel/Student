@@ -1,0 +1,79 @@
+﻿@model FinalAssesment.Models.Student
+
+@{
+    ViewData["Title"] = "StudentDetail";
+    Layout = "~/Views/Shared/StudentDetail.cshtml";
+}
+
+<h2>StudentDetail</h2>
+
+<div>
+    <h4>Student</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RollNo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RollNo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Subject)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Subject)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Section)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Section)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfBirth)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateOfBirth)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProfilePicture)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProfilePicture)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Cv)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Cv)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Item)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Item)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Action)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Action)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="EditStudent" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="AllStudents">Back to List</a>
+</div>

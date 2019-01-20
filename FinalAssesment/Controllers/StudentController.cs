@@ -29,9 +29,17 @@ namespace FinalAssesment.Controllers
             return View();
         }
 
+
         public IActionResult AllStudents()
+        {
+            IList<Student> AllStudents = _ORM.Student.ToList<Student>();
+            return View(AllStudents);
+        }
+
+        public IActionResult StudentDetail()
         {
             return View();
         }
+
     }
 }
