@@ -36,9 +36,33 @@ namespace FinalAssesment.Controllers
             return View(AllStudents);
         }
 
-        public IActionResult StudentDetail()
+        public IActionResult StudentDetail(int Id)
         {
-            return View();
+            return View(_ORM.Student.Where(m => m.Id.Equals(Id)).FirstOrDefault());
+            
+        }
+
+        [HttpGet]
+        public IActionResult EditStudent(int Id)
+        {
+            Student student = _ORM.Student.Where(m => m.Id.Equals(Id)).FirstOrDefault();
+            return View(student);
+        }
+
+        [HttpPost]
+        public IActionResult EditStudent(Student student)
+        {
+            try
+            {
+                _ORM.Student.Update(student);
+                _ORM.SaveChanges();
+                ViewBag.MessageSucess = "Record Updated Succefully";
+            }
+            catch
+            {
+                ViewBag.MessageFailure = "Error! Could not Update Record";
+            }
+            return View(student);
         }
 
     }
