@@ -10,7 +10,7 @@
 <p>
     <a asp-action="AddStudent">Create New</a>
 </p>
-<table class="table">
+<table  id="studentTable" class="table table-bordered table-hover">
     <thead>
         <tr>
             <th>
@@ -37,46 +37,80 @@
             <th>
                 @Html.DisplayNameFor(model => model.Cv)
             </th>
-           
+
             <th>
                 @Html.DisplayNameFor(model => model.Action)
-               </th>
-</tr>
+            </th>
+        </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RollNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Subject)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Section)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfBirth)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProfilePicture)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cv)
-            </td>
-            
-            <td>
-                <a asp-action="EditStudent" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="StudentDetail" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="DeleteStudent" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RollNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subject)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Section)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfBirth)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProfilePicture)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cv)
+                </td>
+
+                <td>
+                    <a asp-action="EditStudent" asp-route-id="@item.Id" class="btn btn-warning">Edit</a> |
+                    <a asp-action="StudentDetail" asp-route-id="@item.Id" class="btn btn-info">Details</a> |
+                    <a asp-action="DeleteStudent" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@section Scripts{
+    <script>$().ready(function () {
+            $('#studentTable').DataTable();
+        });
+
+        $(function () {
+            $('.DeleteStudent').click(function () {
+                var ClickedButton = $(this);
+                var StudentId = ClickedButton.data('studentid');
+                ClickedButton.text('Please Wait');
+                $.ajax({
+                    url: "/Student/DeleteStudentByAjax",
+                    type: "POST",
+                    data: {
+                        Id: StudentId
+                    },
+                    complete: function (result) {
+                        if (result.responseText === "Yes") {
+                            alert("Student with ID " + StudentId + " was deleted successfully");
+                            ClickedButton.parent().parent().fadeOut(2000);
+
+                        } else {
+                            alert("Error! could not delte student");
+                            ClickedButton.children().addClass('glyphicon glyphicon-floppy-remove');
+                            ClickedButton.text('Delete');
+                        }
+                    }
+
+                });
+            });
+        });</script>
+}

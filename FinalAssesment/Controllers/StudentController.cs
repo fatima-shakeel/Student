@@ -29,17 +29,43 @@ namespace FinalAssesment.Controllers
             return View();
         }
 
-
+       
         public IActionResult AllStudents()
         {
             IList<Student> AllStudents = _ORM.Student.ToList<Student>();
             return View(AllStudents);
         }
 
+        
+
         public IActionResult StudentDetail(int Id)
         {
             return View(_ORM.Student.Where(m => m.Id.Equals(Id)).FirstOrDefault());
             
+        }
+
+        public string GetStudentsNames()
+        {
+            string Result = "";
+
+            var r = Request;
+            
+            IList<Student> All = _ORM.Student.ToList<Student>();
+            Result += "<h1 class='alert alert-success'>Total Students: " + All.Count + "</h1>";
+
+            foreach (Student S in All)
+            {
+                Result += "<a href='/Student/StudentDetail?Id=" + S.Id + "'><p><span class='glyphicon glyphicon-user'></span> " + S.FirstName + "</p></a> <a href='/student/deletestudent1?id=" + S.Id + "'>Delete</a>";
+            }
+
+            return Result;
+        }
+
+        public string ShowAd()
+        {
+            string Ad = "";
+            Ad = "<img class='img img-responsive' src='http://lorempixel.com/400/400/sports/Theta-Solutions/'/>";
+            return Ad;
         }
 
         [HttpGet]
@@ -63,6 +89,36 @@ namespace FinalAssesment.Controllers
                 ViewBag.MessageFailure = "Error! Could not Update Record";
             }
             return View(student);
+        }
+
+        public IActionResult DeleteStudent(Student student)
+        {
+            _ORM.Student.Remove(student);
+            _ORM.SaveChanges();
+            return RedirectToAction(nameof(StudentController.AllStudents));
+        }
+
+        public IActionResult DeleteStudent1(Student student)
+        {
+            _ORM.Student.Remove(student);
+            _ORM.SaveChanges();
+            return RedirectToAction(nameof(StudentController.AllStudents));
+        }
+
+        public string DeleteStudentByAjax(Student s)
+        {
+            string result;
+            try
+            {
+                _ORM.Student.Remove(s);
+                _ORM.SaveChanges();
+                result = "Yes";
+            }
+            catch
+            {
+                result = "No";
+            }
+            return result;
         }
 
     }
