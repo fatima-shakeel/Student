@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using FinalAssesment.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinalAssesment.Controllers
@@ -10,9 +15,11 @@ namespace FinalAssesment.Controllers
     public class StudentController : Controller
     {
         private studentContext _ORM;
-        public StudentController(studentContext ORM)
+        IHostingEnvironment _ENV = null;
+        public StudentController(studentContext ORM, IHostingEnvironment ENV)
         {
             _ORM = ORM;
+            _ENV = ENV;
         }
 
         [HttpGet]
@@ -22,14 +29,97 @@ namespace FinalAssesment.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddStudent(Student S)
+        public IActionResult AddStudent(Student S, IFormFile ProfilePicture, IFormFile Cv)
         {
-            _ORM.Student.Add(S);
-            _ORM.SaveChanges();
+            string wwwRootPath = _ENV.WebRootPath;
+            string FTPPathForPPs = wwwRootPath + "/WebData/PPs/";
+
+            //if (!Directory.Exists(FTPPathForPPs))
+            //{
+            //    Directory.CreateDirectory(FTPPathForPPs);
+            //}
+
+
+            string UniqueName = Guid.NewGuid().ToString();
+            string FileExtension = Path.GetExtension(ProfilePicture.FileName);
+
+            FileStream FS = new FileStream(FTPPathForPPs + UniqueName + FileExtension, FileMode.Create);
+
+            ProfilePicture.CopyTo(FS);
+
+
+
+
+
+
+            FS.Close();
+
+            S.ProfilePicture = "/WebData/PPs/" + UniqueName + FileExtension;
+
+            string CVPath = "/WebData/CVs/" + Guid.NewGuid().ToString() + Path.GetExtension(Cv.FileName);
+            FileStream CVS = new FileStream(wwwRootPath + CVPath, FileMode.Create);
+            Cv.CopyTo(CVS);
+            CVS.Close();
+            S.Cv = CVPath;
+
+            try
+            {
+                _ORM.Student.Add(S);
+                _ORM.SaveChanges();
+
+                string APIURL = "https://bulksms.vsms.net/eapi/submission/send_sms/2/2.0?username=john&password=abcd1234&message=Hi+Mom+%26+Dad&msisdn=44123123456,44123123457" + S.MobileNo + "&message=Welcome to our website.";
+
+                using (var APIClient = new HttpClient())
+                {
+                    Task<HttpResponseMessage> RM = APIClient.GetAsync(APIURL);
+                    Task<string> FinalRespone = RM.Result.Content.ReadAsStringAsync();
+                }
+
+
+
+                ViewBag.Message = "Registration Done Succefully!";
+                ModelState.Clear();
+
+                //Email object
+                MailMessage oEmail = new MailMessage();
+                oEmail.From = new MailAddress("dazzlinglove98@gmail.com");
+                oEmail.To.Add(new MailAddress(S.Email));
+                oEmail.Subject = "Welcome to ABC";
+                oEmail.Body = "Dear " + S.FirstName + ",<br><br>" +
+                    "Thanks for registering with ABC, We are glad to have you in our system." +
+                    "<br><br>" +
+                    "<b>Regards</b>,<br>ABC Team";
+                oEmail.IsBodyHtml = true;
+                SmtpClient oSMTP = new SmtpClient();
+                oSMTP.Host = "smtp.gmail.com";
+                oSMTP.Port = 587; //465 //25
+                oSMTP.EnableSsl = true;
+                oSMTP.Credentials = new System.Net.NetworkCredential("dazzlinglove98@gmail.com", "fatimashakeel");
+
+            }
+            catch (Exception ex)
+            {
+                
+            }
+           
+
+            
+
+            //
             return View();
         }
 
-       
+        /*public FileResult DownloadCV(string Path)
+        {
+            if (string.IsNullOrEmpty(Path))
+            {
+                ViewBag.Message = "Invalid Path";
+                return null;
+            }
+            return File(Path, new MimeSharp.Mime().Lookup(Path), DateTime.Now.ToString("ddMMyyyyhhmmss") + System.IO.Path.GetExtension(Path));
+        }*/
+
+
         public IActionResult AllStudents()
         {
             IList<Student> AllStudents = _ORM.Student.ToList<Student>();

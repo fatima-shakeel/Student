@@ -16,5 +16,7 @@ namespace FinalAssesment.Models
         public string Cv { get; set; }
         public string Item { get; set; }
         public string Action { get; set; }
+        public string Email { get; set; }
+        public string MobileNo { get; set; }
     }
 }

@@ -46,24 +46,25 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProfilePicture" class="control-label"></label>
-                <input asp-for="ProfilePicture" class="form-control" />
-                <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+                <input type="file" id="ProfilePicture" name="ProfilePicture" />
+                <span id="PPError"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Cv" class="control-label"></label>
-                <input asp-for="Cv" class="form-control" />
-                <span asp-validation-for="Cv" class="text-danger"></span>
+                <input type="file" id="Cv" name="Cv" />
+                <span id="CvError"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Item" class="control-label"></label>
-                <input asp-for="Item" class="form-control" />
-                <span asp-validation-for="Item" class="text-danger"></span>
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Action" class="control-label"></label>
-                <input asp-for="Action" class="form-control" />
-                <span asp-validation-for="Action" class="text-danger"></span>
+                <label asp-for="MobileNo" class="control-label"></label>
+                <input asp-for="MobileNo" class="form-control" />
+                <span asp-validation-for="MobileNo" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>

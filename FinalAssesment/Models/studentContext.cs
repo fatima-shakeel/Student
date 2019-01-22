@@ -65,6 +65,8 @@ namespace FinalAssesment.Models
                 entity.Property(e => e.Section).HasMaxLength(50);
 
                 entity.Property(e => e.Subject).HasMaxLength(50);
+                entity.Property(e => e.Email).HasMaxLength(50);
+                entity.Property(e => e.MobileNo).HasMaxLength(50);
             });
         }
     }

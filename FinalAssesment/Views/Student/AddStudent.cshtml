@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="AddStudent">
+        <form asp-action="AddStudent" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
@@ -45,15 +45,25 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProfilePicture" class="control-label"></label>
-                <input asp-for="ProfilePicture" class="form-control" />
-                <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+                <input type="file" id="ProfilePicture" name="ProfilePicture" />
+                <span id="ProfilePictureError"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Cv" class="control-label"></label>
-                <input asp-for="Cv" class="form-control" />
-                <span asp-validation-for="Cv" class="text-danger"></span>
+                <input type="file" id="Cv" name="Cv" />
+                <span id="CVError"></span>
             </div>
-           
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MobileNo" class="control-label"></label>
+                <input asp-for="MobileNo" class="form-control" />
+                <span asp-validation-for="MobileNo" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
